@@ -1,7 +1,7 @@
 # Gulp project map
 [![NPM version](https://img.shields.io/badge/npm-1.0.4-brightgreen.svg)](https://www.npmjs.com/package/gulp-project-map)
 
-> Generate a list of html files in a project
+> Generate list of file for the project (html sitemap)
 
 ## Install
 Install with [npm](https://npmjs.org/package/gulp-project-map)
@@ -25,28 +25,28 @@ gulp.task('projectMap', function () {
 
 ## Options
 ### path
-The directory with files that must be considered
+Directory that needs file list created
 
 Type: `string`
 
 Required: `false`
 
 ### extension
-Extension files
+File extension
 
 Type: `string`
 
 Required: `false`
 
 ### name
-Name the file with a list of
+Name of file where list is created
 
 Type: `string`
 
 Required: `false`
 
 ### title
-Title the file with a list of
+File header
 
 Type: `string`
 
