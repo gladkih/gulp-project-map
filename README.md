@@ -17,7 +17,7 @@ var gulp = require('gulp');
 var projectMap = require('gulp-project-map');
 
 gulp.task('projectMap', function () {
-    map({
+    projectMap({
         path: './build'
       });
 });

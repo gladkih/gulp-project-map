@@ -2,8 +2,8 @@
 
 var fs = require('fs');
 var extend = require('extend');
-var path = require('path');
 var jade = require('jade');
+var cheerio = require('cheerio');
 
 function getFiles(options) {
 	options = extend({
@@ -12,10 +12,10 @@ function getFiles(options) {
 		name: 'result',
 		title: 'project-map'
 	}, options);
-	var dir = options.path;
-	console.log(options);
 
+	var dir = options.path;
 	walker(dir, function(error, result) {
+
 		if (error) {
 			throw error;
 		}
@@ -24,25 +24,55 @@ function getFiles(options) {
 			title: options.title,
 			list: []
 		};
+		var len = result.length;
 
-		for (var i = 0, count = result.length; i < count; i += 1) {
-			if (path.extname(result[i]) === options.extension) {
-				data.list.push(result[i].replace(dir + '/', ''));
-			}
+		Promise.prototype.thenReturn = function(value) {
+			return this.then(function() {
+				return value;
+			});
+		};
+
+		function readFile(filePath) {
+			return new Promise(function(resolve) {
+				getTitle(filePath, options.path, function(title) {
+					data.list.push(title);
+					resolve();
+				});
+			});
 		}
 
-		jade.renderFile(__dirname + '/result.jade', {pretty: true, data: data}, function(error, html) {
-			if (error) {
-				console.log('error:\n' + error);
+		Promise.resolve(0).then(function loop(i) {
+			if (i < len) {
+				return readFile(result[i])
+					.thenReturn(i + 1)
+					.then(loop);
 			}
-
-			fs.writeFile(dir + '/' + options.name + '.html', html, function(err) {
-				if (err) {
-					return console.log(err);
-				}
-			});
+		}).then(function() {
+			writeResultFile(options, data);
+			console.log('done');
+		}).catch(function(error) {
+			console.log('error', error);
 		});
 
+	});
+}
+
+/**
+ * Write result file
+ * @param options
+ * @param data
+ */
+function writeResultFile(options, data) {
+	jade.renderFile(__dirname + '/result.jade', {pretty: true, data: data}, function(error, html) {
+		if (error) {
+			console.log('error:\n' + error);
+		}
+
+		fs.writeFile(options.path + '/' + options.name + '.html', html, function(err) {
+			if (err) {
+				return console.log(err);
+			}
+		});
 	});
 }
 
@@ -72,6 +102,32 @@ function walker(directory, callback) {
 				}
 			});
 		})();
+	});
+}
+
+/**
+ *
+ * @param url
+ * @param removePath
+ * @param callback
+ */
+function getTitle(url, removePath, callback) {
+	callback = callback ? callback : function() {
+	};
+	fs.readFile(url, 'utf8', function(error, data) {
+		url = url.replace(removePath + '/', '');
+		var _fileInfo = {
+			title: url,
+			link: url
+		};
+		if (error) {
+			callback(_fileInfo);
+		}
+		var $ = cheerio.load(data);
+		var _title = $('title');
+
+		_fileInfo.title = _title.text() || url;
+		callback(_fileInfo);
 	});
 }
 
