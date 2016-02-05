@@ -23,34 +23,22 @@ gulp.task('projectMap', function () {
 });
 ```
 
-## Options
-### path
-Directory that needs file list created
+### Options
+Type: `Object | Null`<br/>Default:
 
-Type: `string`
+```js
+{
+  path: './',
+  extension: '.html',
+  name: 'result',
+  title: 'project-map'
+}
+```
 
-Required: `false`
-
-### extension
-File extension
-
-Type: `string`
-
-Required: `false`
-
-### name
-Name of file where list is created
-
-Type: `string`
-
-Required: `false`
-
-### title
-File header
-
-Type: `string`
-
-Required: `false`
+- `path` (String) Directory that needs file list created
+- `extension` (String) File extension<br/>
+- `name` (String) Name of file where list is created<br/>
+- `title` (String) File header<br/>
 
 ## License
 MIT ©[Maxim Gladkih](https://gladkih.su)
