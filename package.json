@@ -11,7 +11,8 @@
     "url": "git+https://github.com/gladkih/gulp-project-map.git"
   },
   "keywords": [
-    "gulp"
+    "gulp",
+    "sitemap"
   ],
   "author": "Maxim Gladkih",
   "license": "MIT",
