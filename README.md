@@ -1,5 +1,7 @@
 # Gulp project map
 [![NPM version](https://img.shields.io/badge/npm-1.1.0-brightgreen.svg)](https://www.npmjs.com/package/gulp-project-map)
+[![devDependency Status](https://david-dm.org/gladkih/gulp-project-map/dev-status.svg)](https://david-dm.org/gladkih/gulp-project-map#info=devDependencies)
+
 
 > Generate list of file for the project (html sitemap)
 
