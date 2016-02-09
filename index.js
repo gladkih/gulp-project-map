@@ -3,6 +3,7 @@
 var fs = require('fs');
 var extend = require('extend');
 var jade = require('jade');
+var path = require('path');
 var cheerio = require('cheerio');
 
 function getFiles(options) {
@@ -13,8 +14,7 @@ function getFiles(options) {
 		title: 'project-map'
 	}, options);
 
-	var dir = options.path;
-	walker(dir, function(error, result) {
+	walker(options.path, options.extension, function(error, result) {
 
 		if (error) {
 			throw error;
@@ -76,7 +76,7 @@ function writeResultFile(options, data) {
 	});
 }
 
-function walker(directory, callback) {
+function walker(directory, extension, callback) {
 	var results = [];
 	fs.readdir(directory, function(error, list) {
 		if (error) {
@@ -92,12 +92,14 @@ function walker(directory, callback) {
 			file = directory + '/' + file;
 			fs.stat(file, function(error, stat) {
 				if (stat && stat.isDirectory()) {
-					walker(file, function(error, res) {
+					walker(file, extension, function(error, res) {
 						results = results.concat(res);
 						next();
 					});
 				} else {
-					results.push(file);
+					if (path.extname(file) === extension) {
+						results.push(file);
+					}
 					next();
 				}
 			});
